@@ -21,9 +21,9 @@ jobs:
         run: npm ci --legacy-peer-deps
       - name: build
         run: npm run build
-      #- name: print diff if failed
-      #  if: ${{ failure() }}
-      #  run: cp dist/temp/decentraland-ecs-utils.api.md report/decentraland-ecs-utils.api.md && git diff
+      - name: print diff if failed
+        if: ${{ failure() }}
+        run: cp dist/temp/decentraland-ecs-utils.api.md report/decentraland-ecs-utils.api.md && git diff
       - name: Publish
         uses: menduz/oddish-action@main
         with:
