@@ -1,33 +1,51 @@
+name: Deploy
+
 on:
   push:
     branches:
       - main
-  pull_request:
-  release:
-    types:
-      - created
 
-name: Publish NPM package
 jobs:
-  install:
+  build:
+    name: Build
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@main
-      - name: Use Node.js 16.x
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      - name: Setup Node
         uses: actions/setup-node@v1
         with:
-          node-version: 16.x
-      - name: install
-        run: npm ci --legacy-peer-deps
-      - name: build
+          node-version: 16
+
+      - name: Install dependencies
+        uses: npm ci --legacy-peer-deps
+
+      - name: Build project
         run: npm run build
-      #- name: print diff if failed
-      #  if: ${{ failure() }}
-      #  run: cp dist/temp/decentraland-ecs-utils.api.md report/decentraland-ecs-utils.api.md && git diff
-      - name: Publish
-        uses: menduz/oddish-action@main
+
+      - name: Upload production-ready build files
+        uses: actions/upload-artifact@v2
         with:
-          #cwd: ./dist
-          access: public # 'public' to deploy @scoped/packages
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          name: production-files
+          path: ./dist
+
+  deploy:
+    name: Deploy
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: production-files
+          path: ./dist
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
