@@ -16,8 +16,8 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 12.x
-      - name: Install --legacy-peer-debs dependencies 
-        run: npm install    
+      - name: Install dependencies 
+        run: npm --f install    
       - name: Test
         run: npm test
         env:
