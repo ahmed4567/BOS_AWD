@@ -59,9 +59,12 @@ const Navbar = () => {
               ? "text-white"
               : "text-secondary"
             } font-poppins font-medium cursor-pointer text-[16px]`} 
-            onClick={()=>{setToggle(!toggle);setActive(link.title);}}
+            onClick={()=> {window.scrollTo({
+                            top: document.querySelector(`${link.id}`),
+                            behavior: "smooth",
+                            }); setActive(link.title)}}
             >
-               <a href={`${link.id}`}>{link.title}</a>
+               <a href={`#${link.id}`}>{link.title}</a>
             </li>
           ))}
         </ul>
