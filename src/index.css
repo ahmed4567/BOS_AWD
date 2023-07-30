@@ -3,6 +3,14 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@layer utilities{
+  .animatinon-delay-2000{
+    animation-delay: 2s;
+  }
+  .animatinon-delay-4000{
+    animation-delay: 4s;
+  }
+}
 
 * {
   margin: 0;

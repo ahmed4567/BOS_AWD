@@ -1,78 +1,112 @@
-import React,{useEffect, useState} from 'react'
-import { Link } from 'react-router-dom'
-import {styles} from '../style';
-import { navLinks } from "../constants";
-import {logo,menu,close} from '../assets';
-const Navbar = () => {
-  const [active, setActive] = useState('');
-  const [toggle, setToggle] = useState(false);
-  return (
-    /*Navbar*/
-    <nav
-      className={`
-        ${styles.paddingX} w-full flex items-center py-5 fixed top-0 z-20 bg-primary
-      `}
-    >
-      <div className='w-full flex justify-between items-center max-w-7xl mx-auto'>
-      <Link
-          to='/'
-          className='flex items-center gap-2'
-          onClick={() => {
-            setActive("");
-            window.scrollTo(0, 0);
-          }}
-        >
-          <img src={logo} alt='logo' className='w-13 h-14 object-contain' />
-          <p className='text-white text-[18px] font-bold cursor-pointer flex '>
-            Ahmed &nbsp;
-            <span className='sm:block hidden'> | Web Development </span>
-          </p>
-        </Link>
-        <ul className='list-none hidden sm:flex flex-row gap-5'>
-          {navLinks.map((link)=>(
-            <li key={link.id} 
-            className={`${
-              active === link.title
-              ? "text-white"
-              : "text-secondary"
-            } hover:text-white text-[18px] font-medium cursor-pointer`} 
-            onClick={()=> {window.scrollTo({
-                            top: document.querySelector(`${link.id}`),
-                            behavior: "smooth",
-                            }); setActive(link.title)}}
-            >
-               <a href={`#${link.id}`}>{link.title}</a>
-            </li>
-          ))}
-        </ul>
-        <div className=' sm:hidden flex flex-1 justify-end items-start ' > 
-            <img src={toggle ?close : menu} alt="menu" 
-            className='w-[28px] h-[28px] object-contain cursor-pointer'
-            onClick={()=>setToggle(!toggle)}
-            />
-            <div className={`${!toggle ? 'hidden' : 'flex'} p-6 black-gradient absolute top-20 right-0 mx-4 min-w-[140px] z-10 rounded-xl`}>
-            <ul className='list-none flex justify-end items-start flex-col gap-4'>
-          {navLinks.map((link)=>(
-            <li key={link.id} 
-            className={`${
-              active === link.title
-              ? "text-white"
-              : "text-secondary"
-            } font-poppins font-medium cursor-pointer text-[16px]`} 
-            onClick={()=> {window.scrollTo({
-                            top: document.querySelector(`${link.id}`),
-                            behavior: "smooth",
-                            }); setActive(link.title)}}
-            >
-               <a href={`#${link.id}`}>{link.title}</a>
-            </li>
-          ))}
-        </ul>
-            </div>
-        </div>
-      </div>
-    </nav>
-  )
-}
+import * as React from 'react';
+import { Box } from '@mui/material'
+import Drawer from '@mui/material/Drawer';
+import List from '@mui/material/List';
+import Divider from '@mui/material/Divider';
+import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import Fab from '@mui/material/Fab';
+import SettingsIcon from '@mui/icons-material/Settings';
+import { Link } from 'react-router-dom';
 
-export default Navbar
+  const curentDate =  new Date().toLocaleString() + ""
+  const myLinks = [
+    {
+      text : 'عرض المبيعات',
+      id : "mabeat/"
+    },
+    {
+      text : 'عرض فواتير غير منتهيه',
+      id :"foater/"
+    },
+    {
+      text : 'الخزينة',
+      id : "khazena/"
+    }, 
+    {
+      text : 'نهاية اليوم' ,
+      id : "nhaetElyom/"
+    }
+  ]
+  const myLinks2 = [
+    {text : "إدارة",
+    id :"setings/" 
+    },
+    {text : "معلومات المستخدم",
+      id : "personalInfo/"
+    },
+    {text : "تسجيل الخروج" , 
+      id :"logOut/"
+    }
+  ]
+export default function Navbar() {
+  const [state, setState] = React.useState({
+    left: false,
+  });
+
+  const toggleDrawer = (anchor, open) => (e) => {
+    if (e.type === 'keydown' && (e.key === 'Tab' || e.key === 'Shift')) {
+      return;
+    }
+
+    setState({ ...state, [anchor]: open });
+  };
+
+  const list = (anchor) => (
+    <Box
+      sx={{ width: anchor === 'top' || anchor === 'bottom' ? 'auto' : 250 }}
+      role="presentation"
+      onClick={toggleDrawer(anchor, false)}
+      onKeyDown={toggleDrawer(anchor, false)}
+    >
+      <List>
+        {myLinks.map(({text, id}) => (
+          <ListItem key={text}  disablePadding>
+            <ListItemButton component={Link} to={`${id}`}>
+              <ListItemIcon>
+              </ListItemIcon>
+              <ListItemText primary={text} />
+            </ListItemButton>
+          </ListItem>
+        ))}
+      </List>
+      <Divider />
+      <List>
+        {myLinks2.map(({text, id}) => (
+          <ListItem key={text} disablePadding>
+            <ListItemButton component={Link} to={`${id}`}>
+              <ListItemIcon>
+              </ListItemIcon>
+              <ListItemText primary={text} />
+            </ListItemButton>
+          </ListItem>
+        ))}
+        <h1 className='mx-[25%]'>{curentDate} </h1>
+      </List>
+    </Box>
+  );
+
+  return (
+    <div>
+      {['left'].map((anchor) => (
+        <React.Fragment key={anchor}>
+           <Box  className="absolute top-2 left-2" sx={{ '& > :not(style)': { m: 1 } }}>
+            <Fab onClick={toggleDrawer(anchor, true)} color="secondary" aria-label="edit" >
+            <SettingsIcon/>
+      </Fab>
+    </Box>
+          <Drawer
+            anchor={anchor}
+            open={state[anchor]}
+            onClose={toggleDrawer(anchor, false)}
+          >
+            {list(anchor)}
+          </Drawer>
+        </React.Fragment>
+      ))}
+    </div>
+  );
+}
+ 

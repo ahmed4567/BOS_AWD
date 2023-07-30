@@ -1,24 +1,20 @@
-import { EarthCanvas, BallCanvas, ComputersCanvas, StarsCanvas } from './canvas';
-import Hero from './Hero';
+
+// charts
+
 import Navbar from './Navbar';
-import About from './About';
-import Tech from './Tech';
-import Experience from './Experience';
 import Works from './Works';
-import Feedbacks from './Feedbacks';
-import Contact from './Contact';
+import CheckOuttable from './CheckOuttable'
+import Controles from './Controles'
+import Serchbar from "./Serchbar"
+import Admindash from "./Admindash"
+import FlexBetween from "./FlexBetween"
 
 export {
-  Hero,
-  Navbar,
-  About,
-  Tech,
-  Experience,
-  Works,
-  Feedbacks,
-  Contact,
-  EarthCanvas, 
-  BallCanvas, 
-  ComputersCanvas, 
-  StarsCanvas
-}
+    Navbar,
+    Works,
+    CheckOuttable,
+    Controles,
+    Serchbar,
+    Admindash,
+    FlexBetween
+   };
