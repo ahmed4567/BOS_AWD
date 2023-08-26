@@ -5,6 +5,20 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        prussianBlue: {
+          '50': '#eefaff',
+          '100': '#dcf5ff',
+          '200': '#b2edff',
+          '300': '#6de1ff',
+          '400': '#20d3ff',
+          '500': '#00beff',
+          '600': '#0099df',
+          '700': '#0079b4',
+          '800': '#006795',
+          '900': '#00547a',
+          '950': '#003049',
+      },
+      
         primary: "#050816",
         secondary: "#aaa6c3",
         tertiary: "#151030",
@@ -17,6 +31,7 @@ module.exports = {
       },
       screens: {
         xs: "450px",
+        barcode : "113.39px"
       },
       backgroundImage: {
         "hero-pattern": "url('/src/assets/herobg.png')",

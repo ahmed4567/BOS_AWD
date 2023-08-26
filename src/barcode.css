@@ -1,0 +1,16 @@
+
+@page{
+    size: 1.175in 0.816in;   
+   };    
+@media all {
+    .pageBreak{
+     display: none;
+    }
+};
+@media print {
+    .pageBreak{
+    page-break-before : always ;
+    }
+};
+ 
+   

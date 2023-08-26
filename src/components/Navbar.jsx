@@ -9,39 +9,35 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Fab from '@mui/material/Fab';
 import SettingsIcon from '@mui/icons-material/Settings';
-import { Link } from 'react-router-dom';
-
+import { NavLink } from 'react-router-dom';
+import { useParams } from 'react-router-dom'; 
   const curentDate =  new Date().toLocaleString() + ""
+
+ export default function Navbar() {
+  const {id} = useParams()
   const myLinks = [
     {
-      text : 'عرض المبيعات',
-      id : "mabeat/"
+      text : 'كاشير',
+      id : `/user/${id}/home`
     },
     {
       text : 'عرض فواتير غير منتهيه',
-      id :"foater/"
+      id :`/user/${id}/foater`
     },
     {
       text : 'الخزينة',
-      id : "khazena/"
+      id :`/user/${id}/khazena`
     }, 
-    {
-      text : 'نهاية اليوم' ,
-      id : "nhaetElyom/"
-    }
   ]
   const myLinks2 = [
     {text : "إدارة",
-    id :"setings/" 
-    },
-    {text : "معلومات المستخدم",
-      id : "personalInfo/"
+    id :`/user/${id}/settings` 
     },
     {text : "تسجيل الخروج" , 
-      id :"logOut/"
+      id :`/logOut`
     }
   ]
-export default function Navbar() {
+
   const [state, setState] = React.useState({
     left: false,
   });
@@ -64,7 +60,7 @@ export default function Navbar() {
       <List>
         {myLinks.map(({text, id}) => (
           <ListItem key={text}  disablePadding>
-            <ListItemButton component={Link} to={`${id}`}>
+            <ListItemButton component={NavLink} to={`${id}`}>
               <ListItemIcon>
               </ListItemIcon>
               <ListItemText primary={text} />
@@ -76,7 +72,7 @@ export default function Navbar() {
       <List>
         {myLinks2.map(({text, id}) => (
           <ListItem key={text} disablePadding>
-            <ListItemButton component={Link} to={`${id}`}>
+            <ListItemButton component={NavLink} end to={`${id}`}>
               <ListItemIcon>
               </ListItemIcon>
               <ListItemText primary={text} />

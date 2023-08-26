@@ -1,14 +1,15 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import User from "../models/User.js";
-
+import User from "../mongodb/models/user.js";
+import * as dotenv from "dotenv"
+dotenv.config()
 /* REGISTER USER */
 export const register = async (req, res) => {
   try {
     const {
-        name ,
+        name ,  
         userName,
-        emaile,
+        email,
         phone ,
         passWord , 
     } = req.body;
@@ -16,33 +17,35 @@ export const register = async (req, res) => {
     const salt = await bcrypt.genSalt();
     const passwordHash = await bcrypt.hash(passWord, salt);
 
-    const newUser = new User({
+    const newUser = await  User.create({
         name,
-        emaile,
+        email,
         userName,
-        phone ,
+        phone,
         passWord: passwordHash,
-        allItems:[{}]
+        allItems:[]
     });
-    const savedUser = await newUser.save();
-    res.status(201).json(savedUser);
+    console.log(newUser)
+    res.status(201).json(newUser);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ message: err.message });
   }
 };
 
 /* LOGGING IN */
 export const login = async (req, res) => {
   try {
+    console.log(req.body)
     const { userName, passWord } = req.body;
     const user = await User.findOne({ userName: userName });
+    console.log("found you")
     if (!user) return res.status(400).json({ msg: "User does not exist. " });
-
     const isMatch = await bcrypt.compare(passWord, user.passWord);
-    if (!isMatch) return res.status(400).json({ msg: "Invalid credentials. " });
+    if (!isMatch) return res.status(400).json({ message: "Invalid credentials. " });
 
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
-    delete user.password;
+    console.log(token)
+    delete user.passWord;
     res.status(200).json({ token, user });
   } catch (err) {
     res.status(500).json({ error: err.message });

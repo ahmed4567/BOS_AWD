@@ -3,34 +3,16 @@ import { styled } from '@mui/material/styles';
 import { Box } from '@mui/material'
 import ButtonBase from '@mui/material/ButtonBase';
 import Typography from '@mui/material/Typography';
-
+import { useParams } from 'react-router-dom'; 
 const images = [
   {
-    title: 'فاتورة جديدة',
+    title: 'فاتورة جديدة',id:'1',
   },
   {
-    title: 'كمية',
+    title: 'درج النقدية',id:'2',
   },
   {
-    title: 'بحث',
-  },
-  {
-    title: 'حذف',
-  },
-  {
-    title: 'ملاحظة',
-  },
-  {
-    title: 'بيانات العميل',
-  },
-  {
-    title: 'درج النقدية',
-  },
-  {
-    title: 'تعليق فاتورة',
-  },
-  {
-    title: 'استرداد',
+    title: 'استرداد',id:'3',
   },
   
 ];
@@ -96,7 +78,17 @@ const ImageMarked = styled('span')(({ theme }) => ({
   transition: theme.transitions.create('opacity'),
 }));
 
+
 export default function Controles() {
+  const {id} = useParams()
+  const handleClik = (e)=>()=>{
+    if (e === `1`){
+      window.location.reload()
+    }else if(e === '2'){
+      window.location.href = `/user/${id}/khazena`
+    }
+  
+  }
   return (
     <Box sx={{ display: 'flex', flexWrap:"wrap", minWidth: 300 }}>
       {images.map((image) => (
@@ -106,6 +98,7 @@ export default function Controles() {
           style={{
             width: '22%', margin:5
           }}
+          onClick={handleClik(image.id)}
         >
           <ImageSrc style={{ backgroundImage: `url(${image.url})` }} />
           <ImageBackdrop className="MuiImageBackdrop-root" />

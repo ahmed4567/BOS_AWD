@@ -4,7 +4,7 @@ import InputBase from '@mui/material/InputBase';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import SearchIcon from '@mui/icons-material/Search';
-import { useState } from 'react';
+import { useState , useEffect} from 'react';
 import { json } from 'react-router-dom';
 
 
@@ -19,30 +19,73 @@ const  createData= (
 }
 
 const rows = [
-  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-  createData('Eclair', 262, 16.0, 24, 6.0),
-  createData('Cupcake', 305, 3.7, 67, 4.3),
-  createData('Gingerbread', 356, 16.0, 49, 3.9),
 ];
 
 export default function Serchbar() {
-  const [input , setInput] = useState("")
 
-  const feachData = (value)=>{
-    console.log("in")
-    fetch("/data/playground-2.mongodb.js")
-      .then(response => response.json())
-      .then((json) => {console.log(json)
-        /*const result = json.filter((user)=>{
-        return user && user.name && user.name.toLowerCase().includes(value)
-        }*/})
+
+
+  const itemLestUpdate =async ()=>{
+    console.log(id)
+    const updatelest = await fetch(
+      `http://localhost:8080/items/${id}`,
+      {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      }
+    )
+    const savedLest = await updatelest.json();
+    console.log(savedLest)
+      if (savedLest !== null){
+    setData(savedLest)}
+    else{
+      setData({})
+    }
         
-      
   }
+  
+  const ItemGeneretor = async (data)=>{
+    const savedUserResponse = await fetch(
+        `http://localhost:8080/items`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data),
+        }
+      )
+      const savedUser = await savedUserResponse.json();
+        console.log(savedUser)
+        itemLestUpdate();
+    }
+    const handleSubmit = (event) => { 
+      event.preventDefault();
+      const formData = new FormData(event.currentTarget);
+      const iData = {
+        Iname : formData.get('Iname'),
+        description:formData.get("description"),
+        SPrice : formData.get(`SPrice`),
+        BPrice:formData.get(`BPrice`),
+        companuName:formData.get(`companuName`),
+        wight : formData.get(`wight`), 
+        lingth :formData.get(`lingth`),
+        amount :formData.get(`amount`),
+        Exdate :formData.get(`Exdate`),
+        creator:id
+        }
+      ItemGeneretor(iData)
+      printParcod(iData)
+      document.getElementById("myform").reset();
+
+    };
+  const [input , setInput] = useState("")
+  useEffect(() => {
+    itemLestUpdate();
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+ 
   const handelChanges = (value)=>{
     setInput(value)
-    feachData(value)
+    itemLestUpdate(value)
   }
 
   return (
